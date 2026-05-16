@@ -28,3 +28,8 @@ body {
 * {
   box-sizing: border-box;
 }
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}

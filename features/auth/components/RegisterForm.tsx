@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Mail, LockKeyhole, UserRound } from "lucide-react";
+import { ArrowRight, Mail, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 
 export function RegisterForm() {
@@ -90,25 +91,20 @@ export function RegisterForm() {
 
           <div className="space-y-2">
             <Label htmlFor="password">Senha</Label>
-            <div className="relative">
-              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <Input
-                autoComplete="new-password"
-                className="pl-10"
-                disabled={isLoading}
-                id="password"
-                minLength={4}
-                name="password"
-                onChange={(event) => {
-                  clearFeedback();
-                  setPassword(event.target.value);
-                }}
-                placeholder="Crie uma senha"
-                required
-                type="password"
-                value={password}
-              />
-            </div>
+            <PasswordInput
+              autoComplete="new-password"
+              disabled={isLoading}
+              id="password"
+              minLength={4}
+              name="password"
+              onChange={(event) => {
+                clearFeedback();
+                setPassword(event.target.value);
+              }}
+              placeholder="Crie uma senha"
+              required
+              value={password}
+            />
           </div>
 
           {error ? <Alert variant="error">{error}</Alert> : null}

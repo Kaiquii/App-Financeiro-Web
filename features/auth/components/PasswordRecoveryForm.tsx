@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, KeyRound, LockKeyhole, Mail } from "lucide-react";
+import { ArrowRight, KeyRound, Mail } from "lucide-react";
 import Link from "next/link";
 import type { FormEvent } from "react";
 import { useState } from "react";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 
 type RecoveryStep = "email" | "reset" | "done";
@@ -117,25 +118,20 @@ export function PasswordRecoveryForm() {
 
             <div className="space-y-2">
               <Label htmlFor="new-password">Nova senha</Label>
-              <div className="relative">
-                <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                  autoComplete="new-password"
-                  className="pl-10"
-                  disabled={isLoading}
-                  id="new-password"
-                  minLength={4}
-                  name="new-password"
-                  onChange={(event) => {
-                    clearFeedback();
-                    setNewPassword(event.target.value);
-                  }}
-                  placeholder="Nova senha"
-                  required
-                  type="password"
-                  value={newPassword}
-                />
-              </div>
+              <PasswordInput
+                autoComplete="new-password"
+                disabled={isLoading}
+                id="new-password"
+                minLength={4}
+                name="new-password"
+                onChange={(event) => {
+                  clearFeedback();
+                  setNewPassword(event.target.value);
+                }}
+                placeholder="Nova senha"
+                required
+                value={newPassword}
+              />
             </div>
 
             {error ? <Alert variant="error">{error}</Alert> : null}

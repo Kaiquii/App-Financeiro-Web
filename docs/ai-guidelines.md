@@ -7,6 +7,7 @@ Este arquivo define regras permanentes para qualquer IA ou pessoa que trabalhar 
 - Leia o `AGENTS.md` da raiz.
 - Leia este arquivo.
 - Leia `docs/project-architecture.md`.
+- Leia `docs/backend-api-contract.md` antes de implementar ou alterar chamadas de API.
 - Como este projeto usa Next.js 16, consulte a documentacao local em `node_modules/next/dist/docs/` antes de usar APIs, convencoes ou estruturas do Next.js.
 - Entenda a estrutura atual antes de criar arquivos, pastas, componentes ou stores.
 
@@ -51,6 +52,7 @@ Este arquivo define regras permanentes para qualquer IA ou pessoa que trabalhar 
 - Configuracoes compartilhadas do Axios devem ficar em `lib/api.ts`.
 - A base URL da API deve ser lida de `NEXT_PUBLIC_API_BASE_URL` no `.env`.
 - Chamadas especificas de uma feature devem ficar em `features/<feature>/api`.
+- O contrato de endpoints, bodies, filtros e regras de `update_future`, `delete_future` e `repeat_future` fica em `docs/backend-api-contract.md`.
 - Evitar espalhar URLs, headers e tratamento de erro diretamente em componentes.
 
 ## Responsividade

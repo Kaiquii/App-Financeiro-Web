@@ -28,7 +28,10 @@ export function AuthShell({ children, description, title }: AuthShellProps) {
                 </p>
               </div>
             </div>
-            <ThemeToggle />
+            <ThemeToggle
+              className="h-10 w-10 border-slate-200 bg-slate-50 text-slate-700 shadow-sm hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
+              iconSize={18}
+            />
           </div>
 
           <div className="max-w-xl py-10 lg:py-0">

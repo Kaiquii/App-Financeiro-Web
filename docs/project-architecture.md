@@ -72,6 +72,7 @@ Este projeto deve manter uma arquitetura simples, previsivel e facil de evoluir.
 - Manter `.env.example` atualizado com as variaveis obrigatorias do projeto.
 - Chamadas HTTP e integracoes especificas devem ficar em `features/<feature>/api`.
 - Regras especificas de uma feature devem ficar no `api` da propria feature.
+- Regras de contrato do back-end devem seguir `docs/backend-api-contract.md`.
 - Codigo de API compartilhado deve ficar em `lib`.
 - Evitar chamadas HTTP diretamente dentro de componentes quando elas puderem ficar em uma camada de API.
 
