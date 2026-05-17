@@ -36,7 +36,7 @@ function getRoleInfo(role: string | undefined) {
   return {
     className: "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300",
     icon: <UserRound aria-hidden="true" size={15} strokeWidth={2.25} />,
-    label: "Usuario",
+    label: "Usuário",
   };
 }
 
@@ -105,11 +105,11 @@ export function ProfileView() {
 
               <div className="min-w-0 flex-1 overflow-hidden">
                 <h2 className="truncate text-2xl font-semibold text-slate-950 dark:text-slate-50">
-                  {user?.name || "Usuario"}
+                  {user?.name || "Usuário"}
                 </h2>
 
                 <p className="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
-                  {user?.email || "email nao informado"}
+                  {user?.email || "E-mail não informado."}
                 </p>
 
                 <span
@@ -139,19 +139,19 @@ export function ProfileView() {
 
         <div className="min-w-0">
           <h2 className="text-lg font-semibold text-slate-950 dark:text-slate-50">
-            Configuracoes
+            Configurações
           </h2>
 
           <div className="mt-3 grid min-w-0 gap-3">
             <ProfileShortcut
-              description="Salario, Adiantamento e Renda Extra"
+              description="Salário, adiantamento e renda extra."
               href="/salario"
               icon={<CircleDollarSign aria-hidden="true" size={20} strokeWidth={2.25} />}
-              title="Configuracoes de Renda"
+              title="Configurações de Renda"
             />
 
             <ProfileShortcut
-              description="Crie e edite suas categorias"
+              description="Crie e edite suas categorias."
               href="/perfil/categorias"
               icon={<Shapes aria-hidden="true" size={20} strokeWidth={2.25} />}
               title="Categorias"
@@ -166,7 +166,7 @@ export function ProfileView() {
 
           <div className="mt-3 min-w-0">
             <ProfileShortcut
-              description="Duvidas frequentes e suporte"
+              description="Dúvidas frequentes e suporte."
               href="/perfil/ajuda"
               icon={<HelpCircle aria-hidden="true" size={20} strokeWidth={2.25} />}
               title="Central de Ajuda"
@@ -187,7 +187,7 @@ export function ProfileView() {
 
       <ConfirmationDialog
         confirmLabel="Sim, sair"
-        description="Voce sera desconectado da sua conta e precisara fazer login novamente para acessar o painel."
+        description="Você será desconectado da sua conta e precisará fazer login novamente para acessar o painel."
         isOpen={isLogoutDialogOpen}
         onClose={() => setIsLogoutDialogOpen(false)}
         onConfirm={handleLogout}

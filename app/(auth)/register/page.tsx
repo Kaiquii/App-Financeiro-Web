@@ -4,7 +4,7 @@ import { RegisterForm } from "@/features/auth/components/RegisterForm";
 export default function RegisterPage() {
   return (
     <AuthShell
-      description="Crie sua conta e depois entre pelo fluxo padrao do projeto."
+      description="Crie sua conta e depois entre pelo fluxo padrão do projeto."
       title="Comece com uma conta segura."
     >
       <RegisterForm />

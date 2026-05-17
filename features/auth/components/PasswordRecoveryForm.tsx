@@ -52,7 +52,7 @@ export function PasswordRecoveryForm() {
       <CardHeader>
         <CardTitle>Recuperar acesso</CardTitle>
         <CardDescription>
-          Envie o codigo para o e-mail e cadastre uma nova senha.
+          Envie o código para o e-mail e cadastre uma nova senha.
         </CardDescription>
       </CardHeader>
 
@@ -84,7 +84,7 @@ export function PasswordRecoveryForm() {
             {error ? <Alert variant="error">{error}</Alert> : null}
 
             <Button className="w-full" disabled={isLoading} type="submit">
-              {isLoading ? "Enviando..." : "Enviar codigo"}
+              {isLoading ? "Enviando..." : "Enviar código"}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </form>
@@ -95,7 +95,7 @@ export function PasswordRecoveryForm() {
             {message ? <Alert variant="success">{message}</Alert> : null}
 
             <div className="space-y-2">
-              <Label htmlFor="code">Codigo</Label>
+              <Label htmlFor="code">Código</Label>
               <div className="relative">
                 <KeyRound className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { getBrowserAuthToken } from "@/lib/auth-cookie";
+
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: {
@@ -7,11 +9,14 @@ export const apiClient = axios.create({
   },
 });
 
-export function setApiAuthorizationToken(token: string | null) {
+apiClient.interceptors.request.use((config) => {
+  const token = getBrowserAuthToken();
+
   if (token) {
-    apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
-    return;
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    delete config.headers.Authorization;
   }
 
-  delete apiClient.defaults.headers.common.Authorization;
-}
+  return config;
+});

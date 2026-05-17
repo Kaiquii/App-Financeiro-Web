@@ -26,21 +26,13 @@ import {
 import type { IncomeSource } from "@/features/incomes/types/income";
 import { summaryApi } from "@/features/summary/api/summaryApi";
 import type { MonthlySummary } from "@/features/summary/types/summary";
+import { formatMoney } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 
 const monthFormatter = new Intl.DateTimeFormat("pt-BR", {
   month: "long",
   year: "numeric",
 });
-
-const moneyFormatter = new Intl.NumberFormat("pt-BR", {
-  currency: "BRL",
-  style: "currency",
-});
-
-function formatMoney(value: number | null | undefined) {
-  return moneyFormatter.format(value ?? 0);
-}
 
 type SummaryCardProps = {
   action?: React.ReactNode;
@@ -289,7 +281,7 @@ export function MonthlySummaryView() {
         }
       } catch {
         if (isMounted) {
-          setError("Nao foi possivel carregar o resumo mensal.");
+          setError("Não foi possível carregar o resumo mensal.");
         }
       } finally {
         if (isMounted) {
@@ -323,7 +315,7 @@ export function MonthlySummaryView() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-              Visao Mensal
+              Visão Mensal
             </p>
             <h1 className="mt-1 text-2xl font-semibold capitalize text-slate-950 dark:text-slate-50">
               {monthLabel}
@@ -337,7 +329,7 @@ export function MonthlySummaryView() {
         {!isLoading && (error || !summary) ? (
           <div>
             <Alert variant="error">
-              {error ?? "Resumo mensal indisponivel."}
+              {error ?? "Resumo mensal indisponível."}
             </Alert>
             <Button
               className="mt-4"
@@ -353,9 +345,9 @@ export function MonthlySummaryView() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <SummaryCard
               className="md:col-span-2 xl:col-span-4"
-              hint="Saldo livre no mes"
+              hint="Saldo livre no mês."
               icon={<PiggyBank aria-hidden="true" size={48} />}
-              label="Total Geral Disponivel"
+              label="Total Geral Disponível"
               tone="balance"
               value={summary.total_geral_disponivel}
             />
@@ -385,7 +377,7 @@ export function MonthlySummaryView() {
                   year={year}
                 />
               }
-              label="Salario"
+              label="Salário"
               tone="source"
               value={summary.salario}
             />
@@ -416,13 +408,13 @@ export function MonthlySummaryView() {
               }
               className="md:col-span-2"
               icon={<BarChart3 aria-hidden="true" size={38} />}
-              label="Renda Extra (Disponivel)"
+              label="Renda Extra (Disponível)"
               tone="extra"
               value={summary.restante_renda_extra}
             />
 
             <SummaryCard
-              label="Restante Salario"
+              label="Restante Salário"
               tone="remaining"
               value={summary.restante_salario}
             />
@@ -434,7 +426,7 @@ export function MonthlySummaryView() {
 
             <SummaryCard
               icon={<ReceiptText aria-hidden="true" size={30} />}
-              label="Gasto Salario"
+              label="Gasto Salário"
               tone="spent"
               value={gastoSalario}
             />

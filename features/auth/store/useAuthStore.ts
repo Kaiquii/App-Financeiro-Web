@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -13,7 +12,12 @@ import type {
   ResetPasswordRequest,
   UpdateProfileRequest,
 } from "@/features/auth/types/auth";
-import { setApiAuthorizationToken } from "@/lib/api";
+import { getApiErrorMessage } from "@/lib/api-errors";
+import {
+  clearBrowserAuthToken,
+  getBrowserAuthToken,
+  setBrowserAuthToken,
+} from "@/lib/auth-cookie";
 
 type AuthState = {
   error: string | null;
@@ -21,7 +25,6 @@ type AuthState = {
   isAuthenticated: boolean;
   isLoading: boolean;
   message: string | null;
-  token: string | null;
   user: AuthUser | null;
   clearFeedback: () => void;
   forgotPassword: (data: ForgotPasswordRequest) => Promise<void>;
@@ -29,27 +32,10 @@ type AuthState = {
   logout: () => void;
   register: (data: RegisterRequest) => Promise<void>;
   resetPassword: (data: ResetPasswordRequest) => Promise<void>;
+  restoreSession: () => void;
   setHasHydrated: (hasHydrated: boolean) => void;
   updateProfile: (data: UpdateProfileRequest) => Promise<void>;
 };
-
-function getErrorMessage(error: unknown) {
-  if (axios.isAxiosError(error)) {
-    const data = error.response?.data;
-
-    if (typeof data === "object" && data !== null) {
-      if ("message" in data && typeof data.message === "string") {
-        return data.message;
-      }
-
-      if ("error" in data && typeof data.error === "string") {
-        return data.error;
-      }
-    }
-  }
-
-  return "Nao foi possivel concluir a acao. Tente novamente.";
-}
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -59,7 +45,6 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: false,
       message: null,
-      token: null,
       user: null,
 
       clearFeedback: () => set({ error: null, message: null }),
@@ -71,7 +56,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await authApi.forgotPassword(data);
           set({ isLoading: false, message: response.message });
         } catch (error) {
-          set({ error: getErrorMessage(error), isLoading: false, message: null });
+          set({ error: getApiErrorMessage(error), isLoading: false, message: null });
           throw error;
         }
       },
@@ -82,22 +67,20 @@ export const useAuthStore = create<AuthState>()(
         try {
           const response = await authApi.login(data);
 
-          setApiAuthorizationToken(response.token);
+          setBrowserAuthToken(response.token);
           set({
             error: null,
             isAuthenticated: true,
             isLoading: false,
             message: response.message,
-            token: response.token,
             user: response.user,
           });
         } catch (error) {
           set({
-            error: getErrorMessage(error),
+            error: getApiErrorMessage(error),
             isAuthenticated: false,
             isLoading: false,
             message: null,
-            token: null,
             user: null,
           });
           throw error;
@@ -105,13 +88,12 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        setApiAuthorizationToken(null);
+        clearBrowserAuthToken();
         set({
           error: null,
           isAuthenticated: false,
           isLoading: false,
           message: null,
-          token: null,
           user: null,
         });
       },
@@ -123,7 +105,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await authApi.register(data);
           set({ isLoading: false, message: response.message });
         } catch (error) {
-          set({ error: getErrorMessage(error), isLoading: false, message: null });
+          set({ error: getApiErrorMessage(error), isLoading: false, message: null });
           throw error;
         }
       },
@@ -135,10 +117,23 @@ export const useAuthStore = create<AuthState>()(
           const response = await authApi.resetPassword(data);
           set({ isLoading: false, message: response.message });
         } catch (error) {
-          set({ error: getErrorMessage(error), isLoading: false, message: null });
+          set({ error: getApiErrorMessage(error), isLoading: false, message: null });
           throw error;
         }
       },
+
+      restoreSession: () =>
+        set((state) => {
+          const token = getBrowserAuthToken();
+
+          return {
+            error: null,
+            isAuthenticated: Boolean(token),
+            isLoading: false,
+            message: null,
+            user: token ? state.user : null,
+          };
+        }),
 
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
 
@@ -158,7 +153,7 @@ export const useAuthStore = create<AuthState>()(
             },
           }));
         } catch (error) {
-          set({ error: getErrorMessage(error), isLoading: false, message: null });
+          set({ error: getApiErrorMessage(error), isLoading: false, message: null });
           throw error;
         }
       },
@@ -166,19 +161,10 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "app-financeiro-auth",
       onRehydrateStorage: () => (state) => {
-        const token = state?.token ?? null;
-
-        setApiAuthorizationToken(token);
-
-        if (!token) {
-          state?.logout();
-        }
-
+        state?.restoreSession();
         state?.setHasHydrated(true);
       },
       partialize: (state) => ({
-        isAuthenticated: state.isAuthenticated,
-        token: state.token,
         user: state.user,
       }),
     },

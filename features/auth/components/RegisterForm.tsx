@@ -117,7 +117,7 @@ export function RegisterForm() {
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
-          Ja tem uma conta?{" "}
+          Já tem uma conta?{" "}
           <Link
             className="font-semibold text-emerald-700 underline-offset-4 hover:underline dark:text-emerald-300"
             href="/login"

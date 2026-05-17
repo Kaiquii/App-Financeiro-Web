@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# App Financeiro Web
 
-## Getting Started
+Aplicação web do App Financeiro, criada com Next.js, React, TypeScript, Tailwind CSS, Zustand e Axios.
 
-First, run the development server:
+O projeto consome uma API externa para autenticação, despesas, rendas, categorias e relatórios financeiros.
+
+## Requisitos
+
+- Node.js compatível com Next.js 16.
+- npm.
+- URL da API configurada em variável de ambiente.
+
+## Configuração do ambiente
+
+Crie um arquivo `.env` local a partir do exemplo:
+
+```bash
+cp .env.example .env
+```
+
+Depois, ajuste a URL da API:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+```
+
+O arquivo `.env` não deve ser enviado para o Git. Ele fica apenas na máquina local ou no ambiente de deploy.
+
+O arquivo versionado é apenas o `.env.example`, usado como referência das variáveis necessárias.
+
+## Scripts
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Rode em desenvolvimento:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Gere o build de produção:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Rode o build de produção:
 
-## Learn More
+```bash
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+Rode o lint:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy
 
-## Deploy on Vercel
+### Netlify
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Configure a variável de ambiente no painel do Netlify:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+NEXT_PUBLIC_API_BASE_URL=https://url-da-api.com
+```
+
+Como a variável usa o prefixo `NEXT_PUBLIC_`, ela entra no bundle do front-end no momento do build. Se a URL mudar no Netlify, gere um novo deploy.
+
+### VM
+
+Na VM, mantenha um `.env` real fora do Git ou injete a variável pelo ambiente do processo antes de executar:
+
+```bash
+npm install
+npm run build
+npm run start
+```
+
+## Autenticação
+
+- O token fica salvo no cookie `app-financeiro-token`.
+- O `proxy.ts` protege as rotas autenticadas pela presença do cookie.
+- O Axios lê o cookie a cada request e envia `Authorization: Bearer TOKEN`.
+- Se a API retornar `401`, a sessão local é limpa e o usuário volta para `/login`.
+
+## Estrutura principal
+
+```text
+app/                 Rotas e layouts do Next.js.
+components/layout/   Header, sidebar, page header e estrutura autenticada.
+components/ui/       Componentes visuais reutilizáveis.
+features/            Módulos por domínio da aplicação.
+lib/                 Cliente Axios, cookies, formatadores e helpers.
+store/               Stores globais compartilhadas.
+docs/                Contratos e orientações do projeto.
+```
+
+## Rotas principais
+
+- `/login`
+- `/register`
+- `/forget-password`
+- `/home`
+- `/inicio`
+- `/despesas`
+- `/relatorios`
+- `/perfil`
+- `/perfil/editar`
+- `/perfil/categorias`
+- `/perfil/ajuda`
+- `/salario`
+
+## Observações
+
+Antes de alterar código, leia:
+
+- `AGENTS.md`
+- `docs/ai-guidelines.md`
+- `docs/project-architecture.md`
+- `docs/backend-api-contract.md`
+
+Esses arquivos definem as regras de arquitetura, UI, estado, consumo de API e organização do projeto.

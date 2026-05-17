@@ -15,10 +15,10 @@ export function HomeOverview() {
           Painel financeiro
         </p>
         <h1 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-slate-50 sm:text-3xl">
-          {user?.name ? `${user.name}, escolha uma area` : "Escolha uma area"}
+          {user?.name ? `${user.name}, escolha uma área.` : "Escolha uma área."}
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
-          Acesse rapidamente as principais areas do app e mantenha sua rotina
+          Acesse rapidamente as principais áreas do app e mantenha sua rotina
           financeira organizada.
         </p>
       </section>

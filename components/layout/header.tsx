@@ -16,8 +16,10 @@ type HeaderProps = {
 
 const extraRouteTitles = [
   { href: "/home", label: "Home" },
-  { href: "/salario", label: "Salario" },
-  { href: "/configuracoes", label: "Configuracoes" },
+  { href: "/salario", label: "Salário" },
+  { href: "/perfil/ajuda", label: "Central de Ajuda" },
+  { href: "/perfil/categorias", label: "Categorias" },
+  { href: "/perfil/editar", label: "Editar Perfil" },
 ];
 
 const routeTitles = [...extraRouteTitles, ...dashboardNavigation];
@@ -39,7 +41,7 @@ export function Header({ onOpenSidebar }: HeaderProps) {
   const router = useRouter();
   const userMenuRef = useRef<HTMLDivElement>(null);
   const currentPageTitle = getCurrentPageTitle(pathname);
-  const userName = user?.name ?? "Usuario";
+  const userName = user?.name ?? "Usuário";
 
   useEffect(() => {
     if (!isUserMenuOpen) {
@@ -129,7 +131,7 @@ export function Header({ onOpenSidebar }: HeaderProps) {
               >
                 <UserRound aria-hidden="true" size={14} strokeWidth={2.25} />
                 <span className="hidden max-w-32 truncate sm:inline">
-                  Ola, {userName}
+                  Olá, {userName}
                 </span>
                 <ChevronDown
                   aria-hidden="true"
@@ -165,7 +167,7 @@ export function Header({ onOpenSidebar }: HeaderProps) {
 
       <ConfirmationDialog
         confirmLabel="Sim, sair"
-        description="Voce sera desconectado da sua conta e precisara fazer login novamente para acessar o painel."
+        description="Você será desconectado da sua conta e precisará fazer login novamente para acessar o painel."
         isOpen={isLogoutDialogOpen}
         onClose={() => setIsLogoutDialogOpen(false)}
         onConfirm={handleLogout}

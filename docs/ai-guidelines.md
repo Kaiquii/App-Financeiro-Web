@@ -41,6 +41,16 @@ Este arquivo define regras permanentes para qualquer IA ou pessoa que trabalhar 
 - Sempre verificar contraste, legibilidade, bordas, backgrounds, hover/focus e estados desabilitados nos dois temas.
 - Nada visual deve ficar quebrado, ilegivel ou sem contraste em qualquer tema.
 
+## Textos, mensagens e documentação
+
+- Todo texto exibido ao usuário deve ser revisado com cuidado antes de finalizar a alteração.
+- Frases completas devem ter pontuação adequada, incluindo ponto final, interrogação ou exclamação quando fizer sentido.
+- Textos em português devem usar acentuação correta, como `não`, `mês`, `descrição`, `configuração`, `relatórios`, `usuário` e `salário`.
+- Evitar textos sem acabamento, abreviações confusas ou misturas de português sem acento com português acentuado.
+- Documentação em Markdown também deve seguir esse cuidado: revisar títulos, parágrafos, listas e instruções antes de entregar.
+- Labels curtos, nomes de botões, itens de menu e placeholders podem ficar sem ponto final quando isso for mais natural na interface.
+- Não alterar valores técnicos, contratos de API, nomes de variáveis, rotas ou enums apenas para acentuar texto. Exemplo: manter `Salario` quando esse for o valor esperado pelo back-end.
+
 ## Estado
 
 - Estados globais ou compartilhados devem ser organizados com Zustand.

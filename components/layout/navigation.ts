@@ -4,25 +4,25 @@ export const dashboardNavigation = [
   {
     href: "/inicio",
     icon: Home,
-    label: "Inicio",
-    text: "Resumo principal",
+    label: "Início",
+    text: "Resumo principal.",
   },
   {
     href: "/despesas",
     icon: TrendingDown,
     label: "Despesas",
-    text: "Organize seus gastos",
+    text: "Organize seus gastos.",
   },
   {
     href: "/relatorios",
     icon: BarChart3,
-    label: "Relatorios",
-    text: "Analise resultados",
+    label: "Relatórios",
+    text: "Analise resultados.",
   },
   {
     href: "/perfil",
     icon: UserRound,
     label: "Perfil",
-    text: "Gerencie seus dados",
+    text: "Gerencie seus dados.",
   },
 ];

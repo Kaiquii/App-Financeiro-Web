@@ -1,18 +1,24 @@
 "use client";
 
-import { ArrowLeft, Pencil, Plus, RefreshCcw, Save, Trash2, X } from "lucide-react";
-import Link from "next/link";
+import { Pencil, Plus, RefreshCcw, Save, Trash2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 
+import { PageHeader } from "@/components/layout/page-header";
 import { Alert } from "@/components/ui/alert";
-import { buttonClassName, Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLockBodyScroll } from "@/components/ui/use-lock-body-scroll";
 import { useExpenseStore } from "@/features/expenses/store/useExpenseStore";
 import type { Category } from "@/features/expenses/types/expense";
-import { EditCategoryDialogProps } from "../types/profile";
+
+type EditCategoryDialogProps = {
+  category: Category | null;
+  isSubmitting: boolean;
+  onClose: () => void;
+  onSave: (name: string) => Promise<void>;
+};
 
 function EditCategoryDialog({
   category,
@@ -140,9 +146,7 @@ export function CategoriesManagerView() {
       await createCategory({ name: trimmedName });
       setNewCategoryName("");
       await loadCategories();
-    } catch {
-      // Feedback is handled by the store.
-    }
+    } catch {}
   }
 
   async function handleUpdateCategory(name: string) {
@@ -156,9 +160,7 @@ export function CategoriesManagerView() {
       await updateCategory(categoryToEdit.id, { name });
       setCategoryToEdit(null);
       await loadCategories();
-    } catch {
-      // Feedback is handled by the store.
-    }
+    } catch {}
   }
 
   async function handleDeleteCategory() {
@@ -180,23 +182,11 @@ export function CategoriesManagerView() {
   return (
     <>
       <section className="mx-auto flex w-full max-w-4xl flex-col gap-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-              Categorias
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-slate-50">
-              Crie e edite suas categorias
-            </h2>
-          </div>
-          <Link
-            className={buttonClassName({ className: "self-start", variant: "secondary" })}
-            href="/perfil"
-          >
-            <ArrowLeft aria-hidden="true" size={16} strokeWidth={2.25} />
-            Voltar
-          </Link>
-        </div>
+        <PageHeader
+          backHref="/perfil"
+          eyebrow="Categorias"
+          title="Crie e edite suas categorias"
+        />
 
         {validationError || error ? (
           <Alert variant="error">{validationError ?? error}</Alert>
@@ -304,7 +294,7 @@ export function CategoriesManagerView() {
         confirmLabel="Excluir"
         description={
           categoryToDelete
-            ? `Deseja excluir a categoria "${categoryToDelete.name}"? Se ela estiver em uso, o servidor pode impedir a remocao.`
+            ? `Deseja excluir a categoria "${categoryToDelete.name}"? Se ela estiver em uso, o servidor pode impedir a remoção.`
             : "Deseja excluir esta categoria?"
         }
         isOpen={Boolean(categoryToDelete)}

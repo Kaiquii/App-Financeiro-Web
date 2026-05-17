@@ -4,8 +4,8 @@ import { PasswordRecoveryForm } from "@/features/auth/components/PasswordRecover
 export default function ForgetPasswordPage() {
   return (
     <AuthShell
-      description="Receba o codigo de redefinicao e cadastre uma nova senha."
-      title="Recupere o acesso com seguranca."
+      description="Receba o código de redefinição e cadastre uma nova senha."
+      title="Recupere o acesso com segurança"
     >
       <PasswordRecoveryForm />
     </AuthShell>

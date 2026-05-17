@@ -1,41 +1,40 @@
 "use client";
 
-import { ArrowLeft, Mail, Phone } from "lucide-react";
-import Link from "next/link";
+import { Mail, Phone } from "lucide-react";
 
-import { buttonClassName } from "@/components/ui/button";
+import { PageHeader } from "@/components/layout/page-header";
 
 const helpSections = [
   {
-    text: "Use o app para acompanhar suas entradas, despesas, categorias e relatorios mensais. Mantenha os cadastros atualizados para que os saldos fiquem corretos.",
+    text: "Use o app para acompanhar suas entradas, despesas, categorias e relatórios mensais. Mantenha os cadastros atualizados para que os saldos fiquem corretos.",
     title: "Como usar o app",
   },
   {
-    text: "A tela inicial mostra um resumo do mes selecionado, com entradas, gastos e saldo disponivel para ajudar na leitura rapida da sua situacao financeira.",
+    text: "A tela inicial mostra um resumo do mês selecionado, com entradas, gastos e saldo disponível para ajudar na leitura rápida da sua situação financeira.",
     title: "Tela inicial",
   },
   {
-    text: "Na area de despesas, informe valor, descricao, categoria, origem de pagamento, data e tipo. Despesas parceladas tambem precisam da quantidade de parcelas.",
+    text: "Na área de despesas, informe valor, descrição, categoria, origem de pagamento, data e tipo. Despesas parceladas também precisam da quantidade de parcelas.",
     title: "Cadastrar despesas",
   },
   {
-    text: "Edite ou exclua despesas pela listagem. Em despesas parceladas ou fixas, o app pode perguntar se a mudanca vale apenas para o registro atual ou tambem para os proximos.",
+    text: "Edite ou exclua despesas pela listagem. Em despesas parceladas ou fixas, o app pode perguntar se a mudança vale apenas para o registro atual ou também para os próximos.",
     title: "Gerenciar despesas",
   },
   {
-    text: "Na area de Perfil, acesse Configuracoes de Renda para cadastrar salario, adiantamento e renda extra. Cada renda pode ser criada, atualizada ou removida por mes.",
+    text: "Na área de Perfil, acesse Configurações de Renda para cadastrar salário, adiantamento e renda extra. Cada renda pode ser criada, atualizada ou removida por mês.",
     title: "Rendas",
   },
   {
-    text: "Em Perfil, acesse Categorias para criar, editar ou excluir categorias. Se uma categoria estiver em uso, o servidor pode bloquear a exclusao e mostrar uma mensagem.",
+    text: "Em Perfil, acesse Categorias para criar, editar ou excluir categorias. Se uma categoria estiver em uso, o servidor pode bloquear a exclusão e mostrar uma mensagem.",
     title: "Categorias",
   },
   {
-    text: "A tela de Relatorios mostra gastos por categoria, comparativo de renda versus despesas e resumo anual com base nos dados cadastrados.",
-    title: "Relatorios",
+    text: "A tela de Relatórios mostra gastos por categoria, comparativo de renda versus despesas e resumo anual com base nos dados cadastrados.",
+    title: "Relatórios",
   },
   {
-    text: "No web, o acesso protegido usa sua sessao salva no navegador. Sempre saia da conta quando estiver usando um dispositivo compartilhado.",
+    text: "No web, o acesso protegido usa sua sessão salva no navegador. Sempre saia da conta quando estiver usando um dispositivo compartilhado.",
     title: "Biometria",
   },
 ];
@@ -83,23 +82,11 @@ function HelpSection({ text, title }: HelpSectionProps) {
 export function HelpView() {
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-col gap-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-            Central de Ajuda
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-slate-50">
-            Duvidas frequentes e suporte
-          </h2>
-        </div>
-        <Link
-          className={buttonClassName({ className: "self-start", variant: "secondary" })}
-          href="/perfil"
-        >
-          <ArrowLeft aria-hidden="true" size={16} strokeWidth={2.25} />
-          Voltar
-        </Link>
-      </div>
+      <PageHeader
+        backHref="/perfil"
+        eyebrow="Central de Ajuda"
+        title="Dúvidas frequentes e suporte"
+      />
 
       <article className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <h3 className="font-semibold text-slate-950 dark:text-slate-50">Contato</h3>

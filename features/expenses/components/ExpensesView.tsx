@@ -32,11 +32,7 @@ import type {
   Expense,
   ExpenseTypeFilter,
 } from "@/features/expenses/types/expense";
-
-const moneyFormatter = new Intl.NumberFormat("pt-BR", {
-  currency: "BRL",
-  style: "currency",
-});
+import { formatMoney } from "@/lib/formatters";
 
 type PaymentSourceFilter = "Adiantamento" | "Renda Extra" | "Salario" | "Todas";
 
@@ -62,10 +58,6 @@ const paymentSourceFilterOptions = paymentSourceFilters.map((source) => ({
         : source,
   value: source,
 }));
-
-function formatMoney(value: number) {
-  return moneyFormatter.format(value);
-}
 
 function normalizeText(value: string) {
   return value
@@ -434,7 +426,7 @@ export function ExpensesView() {
               Nenhuma despesa encontrada
             </h2>
             <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              Ajuste os filtros ou cadastre uma nova despesa para este mes.
+              Ajuste os filtros ou cadastre uma nova despesa para este mês.
             </p>
           </div>
         ) : null}

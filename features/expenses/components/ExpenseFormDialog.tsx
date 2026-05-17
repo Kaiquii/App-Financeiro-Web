@@ -19,6 +19,7 @@ import type {
   PaymentSource,
   UpdateExpenseRequest,
 } from "@/features/expenses/types/expense";
+import { formatAmountInput, parseAmountInput } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 
 export type ExpenseFormMode = "create" | "edit";
@@ -92,24 +93,6 @@ function normalizePaymentSource(value: string): PaymentSource {
   }
 
   return "Sal\u00e1rio";
-}
-
-function parseAmountInput(value: string) {
-  const trimmed = value.trim();
-
-  if (!trimmed) {
-    return Number.NaN;
-  }
-
-  if (trimmed.includes(",")) {
-    return Number(trimmed.replace(/\./g, "").replace(",", "."));
-  }
-
-  return Number(trimmed);
-}
-
-function formatAmountInput(value: number) {
-  return String(value).replace(".", ",");
 }
 
 function padDatePart(value: number) {
@@ -298,9 +281,7 @@ function ExpenseFormDialogContent({
         setIsAddingCategory(false);
         setNewCategoryName("");
       }
-    } catch {
-      // A store mostra a mensagem no modal.
-    }
+    } catch {}
   }
 
   async function submitExpense(confirmedFixedFuture = false) {
@@ -312,7 +293,7 @@ function ExpenseFormDialogContent({
     }
 
     if (!draft.description.trim()) {
-      setLocalError("Informe a descricao da despesa.");
+      setLocalError("Informe a descrição da despesa.");
       return;
     }
 
@@ -355,9 +336,7 @@ function ExpenseFormDialogContent({
       }
 
       onSuccess();
-    } catch {
-      // A store mostra a mensagem no modal.
-    }
+    } catch {}
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -409,7 +388,7 @@ function ExpenseFormDialogContent({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="expense-description">Descricao</Label>
+              <Label htmlFor="expense-description">Descrição</Label>
               <Input
                 id="expense-description"
                 onChange={(event) => updateDraft({ description: event.target.value })}
@@ -546,7 +525,7 @@ function ExpenseFormDialogContent({
 
       <ConfirmationDialog
         confirmLabel="Sim, atualizar futuras"
-        description="Essa despesa e fixa. Confirmando, a atualizacao sera aplicada nas despesas futuras conforme o back-end."
+        description="Essa despesa é fixa. Confirmando, a atualização será aplicada nas despesas futuras conforme o back-end."
         isOpen={isFixedUpdateDialogOpen}
         onClose={() => setIsFixedUpdateDialogOpen(false)}
         onConfirm={() => {

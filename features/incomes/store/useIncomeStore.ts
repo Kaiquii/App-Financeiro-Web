@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { create } from "zustand";
 
 import { incomesApi } from "@/features/incomes/api/incomesApi";
@@ -9,6 +8,7 @@ import type {
   Income,
   UpdateIncomeRequest,
 } from "@/features/incomes/types/income";
+import { getApiErrorMessage } from "@/lib/api-errors";
 
 type IncomeState = {
   error: string | null;
@@ -23,24 +23,6 @@ type IncomeState = {
   loadIncomes: () => Promise<void>;
   updateIncome: (id: number, data: UpdateIncomeRequest) => Promise<void>;
 };
-
-function getErrorMessage(error: unknown) {
-  if (axios.isAxiosError(error)) {
-    const data = error.response?.data;
-
-    if (typeof data === "object" && data !== null) {
-      if ("message" in data && typeof data.message === "string") {
-        return data.message;
-      }
-
-      if ("error" in data && typeof data.error === "string") {
-        return data.error;
-      }
-    }
-  }
-
-  return "Nao foi possivel concluir a acao. Tente novamente.";
-}
 
 export const useIncomeStore = create<IncomeState>((set) => ({
   error: null,
@@ -66,7 +48,7 @@ export const useIncomeStore = create<IncomeState>((set) => ({
         total: listResponse.total,
       });
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },
@@ -85,7 +67,7 @@ export const useIncomeStore = create<IncomeState>((set) => ({
         total: listResponse.total,
       });
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },
@@ -102,7 +84,7 @@ export const useIncomeStore = create<IncomeState>((set) => ({
         total: response.total,
       });
     } catch (error) {
-      set({ error: getErrorMessage(error), isLoading: false });
+      set({ error: getApiErrorMessage(error), isLoading: false });
     }
   },
 
@@ -120,7 +102,7 @@ export const useIncomeStore = create<IncomeState>((set) => ({
         total: listResponse.total,
       });
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },

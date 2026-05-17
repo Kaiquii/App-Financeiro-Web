@@ -1,10 +1,11 @@
 "use client";
 
-import { ArrowLeft, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
+import { PageHeader } from "@/components/layout/page-header";
 import { Alert } from "@/components/ui/alert";
 import { buttonClassName, Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,16 +38,14 @@ export function EditProfileView() {
     const trimmedEmail = email.trim();
 
     if (!trimmedName || !trimmedEmail) {
-      setValidationError("Nome e e-mail sao obrigatorios.");
+      setValidationError("Nome e e-mail são obrigatórios.");
       return;
     }
 
     try {
       await updateProfile({ email: trimmedEmail, name: trimmedName });
       router.replace("/perfil");
-    } catch {
-      // Feedback is handled by the auth store.
-    }
+    } catch {}
   }
 
   return (
@@ -55,23 +54,7 @@ export function EditProfileView() {
         className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-              Editar Perfil
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-slate-50">
-              Dados da conta
-            </h2>
-          </div>
-          <Link
-            className={buttonClassName({ className: "self-start", variant: "secondary" })}
-            href="/perfil"
-          >
-            <ArrowLeft aria-hidden="true" size={16} strokeWidth={2.25} />
-            Voltar
-          </Link>
-        </div>
+        <PageHeader backHref="/perfil" eyebrow="Editar Perfil" title="Dados da conta" />
 
         {validationError || error ? (
           <div className="mt-5">
@@ -113,7 +96,7 @@ export function EditProfileView() {
           </Link>
           <Button disabled={isLoading} type="submit">
             <Save aria-hidden="true" size={16} strokeWidth={2.25} />
-            {isLoading ? "Salvando..." : "Salvar alteracoes"}
+            {isLoading ? "Salvando..." : "Salvar alterações"}
           </Button>
         </div>
       </form>

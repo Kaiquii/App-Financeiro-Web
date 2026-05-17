@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { create } from "zustand";
 
 import { expensesApi } from "@/features/expenses/api/expensesApi";
@@ -12,6 +11,7 @@ import type {
   UpdateCategoryRequest,
   UpdateExpenseRequest,
 } from "@/features/expenses/types/expense";
+import { getApiErrorMessage } from "@/lib/api-errors";
 
 type ExpenseState = {
   categories: Category[];
@@ -34,24 +34,6 @@ type ExpenseState = {
   updateCategory: (id: number, data: UpdateCategoryRequest) => Promise<void>;
   updateExpense: (id: number, data: UpdateExpenseRequest) => Promise<void>;
 };
-
-function getErrorMessage(error: unknown) {
-  if (axios.isAxiosError(error)) {
-    const data = error.response?.data;
-
-    if (typeof data === "object" && data !== null) {
-      if ("message" in data && typeof data.message === "string") {
-        return data.message;
-      }
-
-      if ("error" in data && typeof data.error === "string") {
-        return data.error;
-      }
-    }
-  }
-
-  return "Nao foi possivel concluir a acao. Tente novamente.";
-}
 
 export const useExpenseStore = create<ExpenseState>((set) => ({
   categories: [],
@@ -80,7 +62,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
 
       return category;
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },
@@ -92,7 +74,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
       const response = await expensesApi.createExpense(data);
       set({ isSubmitting: false, message: response.message });
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },
@@ -108,7 +90,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
         message: response.message,
       }));
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },
@@ -120,7 +102,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
       const response = await expensesApi.deleteExpense(id, deleteFuture);
       set({ isSubmitting: false, message: response.message });
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },
@@ -132,7 +114,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
       const response = await expensesApi.getCategories();
       set({ categories: response.categories, isLoading: false });
     } catch (error) {
-      set({ error: getErrorMessage(error), isLoading: false });
+      set({ error: getApiErrorMessage(error), isLoading: false });
     }
   },
 
@@ -146,7 +128,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
       return expense;
     } catch (error) {
       set({
-        error: getErrorMessage(error),
+        error: getApiErrorMessage(error),
         isSubmitting: false,
         selectedExpense: null,
       });
@@ -166,7 +148,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
         total: response.total,
       });
     } catch (error) {
-      set({ error: getErrorMessage(error), isLoading: false });
+      set({ error: getApiErrorMessage(error), isLoading: false });
     }
   },
 
@@ -186,7 +168,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
         total: expensesResponse.total,
       });
     } catch (error) {
-      set({ error: getErrorMessage(error), isLoading: false });
+      set({ error: getApiErrorMessage(error), isLoading: false });
     }
   },
 
@@ -207,7 +189,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
         message: response.message,
       }));
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },
@@ -219,7 +201,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
       const response = await expensesApi.updateExpense(id, data);
       set({ isSubmitting: false, message: response.message });
     } catch (error) {
-      set({ error: getErrorMessage(error), isSubmitting: false, message: null });
+      set({ error: getApiErrorMessage(error), isSubmitting: false, message: null });
       throw error;
     }
   },

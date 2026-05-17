@@ -27,17 +27,8 @@ import type {
   ReportChartItem,
   ReportRange,
 } from "@/features/reports/types/report";
+import { formatMoney, formatPercentage } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
-
-const moneyFormatter = new Intl.NumberFormat("pt-BR", {
-  currency: "BRL",
-  style: "currency",
-});
-
-const percentageFormatter = new Intl.NumberFormat("pt-BR", {
-  maximumFractionDigits: 1,
-  minimumFractionDigits: 0,
-});
 
 const categoryColors = [
   "#1877F2",
@@ -54,14 +45,6 @@ const rangeOptions: Array<{ label: string; value: ReportRange }> = [
   { label: "6 meses", value: "SIX_MONTHS" },
   { label: "1 ano", value: "ONE_YEAR" },
 ];
-
-function formatMoney(value: number | null | undefined) {
-  return moneyFormatter.format(value ?? 0);
-}
-
-function formatPercentage(value: number | null | undefined) {
-  return `${percentageFormatter.format(value ?? 0)}%`;
-}
 
 function getCategoryColor(index: number) {
   return categoryColors[index % categoryColors.length];
@@ -316,7 +299,7 @@ function IncomeExpenseChart({
           </p>
 
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Comparativo mensal de entradas e gastos
+            Comparativo mensal de entradas e gastos.
           </p>
         </div>
 
@@ -493,7 +476,7 @@ export function ReportsView() {
 
             <div className="mt-3 grid gap-4 md:grid-cols-2">
               <MetricCard
-                description="Acumulado no ano"
+                description="Acumulado no ano."
                 icon={<CircleDollarSign aria-hidden="true" size={24} />}
                 label="Economia Total"
                 tone={
@@ -505,7 +488,7 @@ export function ReportsView() {
               />
 
               <MetricCard
-                description={`Média até ${year}`}
+                description={`Média até ${year}.`}
                 icon={<BarChart3 aria-hidden="true" size={24} />}
                 label="Média Mensal"
                 tone={
@@ -520,7 +503,7 @@ export function ReportsView() {
 
           <div className="grid gap-4 md:grid-cols-3">
             <MetricCard
-              description="Entradas registradas no mês"
+              description="Entradas registradas no mês."
               icon={<TrendingUp aria-hidden="true" size={24} />}
               label="Total Recebido"
               tone="positive"
@@ -528,7 +511,7 @@ export function ReportsView() {
             />
 
             <MetricCard
-              description="Despesas registradas no mês"
+              description="Despesas registradas no mês."
               icon={<TrendingDown aria-hidden="true" size={24} />}
               label="Total Gasto"
               tone="negative"
@@ -536,7 +519,7 @@ export function ReportsView() {
             />
 
             <MetricCard
-              description="Saldo disponível no mês"
+              description="Saldo disponível no mês."
               icon={<Wallet aria-hidden="true" size={24} />}
               label="Saldo"
               tone={summary.total_geral_disponivel >= 0 ? "positive" : "negative"}

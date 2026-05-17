@@ -1,18 +1,17 @@
 "use client";
 
 import {
-  ArrowLeft,
   Banknote,
   CircleDollarSign,
   Gift,
   Loader2,
   Trash2,
 } from "lucide-react";
-import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
+import { PageHeader } from "@/components/layout/page-header";
 import { Alert } from "@/components/ui/alert";
-import { buttonClassName, Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,65 +22,13 @@ import {
 } from "@/components/ui/month-switcher";
 import { useIncomeStore } from "@/features/incomes/store/useIncomeStore";
 import type { Income, IncomeSource } from "@/features/incomes/types/income";
+import { findIncomeByReference } from "@/features/incomes/utils/incomeUtils";
+import {
+  formatAmountInput,
+  formatMoney,
+  parseAmountInput,
+} from "@/lib/formatters";
 import { cn } from "@/lib/utils";
-
-const moneyFormatter = new Intl.NumberFormat("pt-BR", {
-  currency: "BRL",
-  style: "currency",
-});
-
-function normalizeSource(source: string): IncomeSource {
-  const normalized = source
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-
-  if (normalized.includes("adiantamento")) {
-    return "Adiantamento";
-  }
-
-  if (normalized.includes("renda extra")) {
-    return "Renda Extra";
-  }
-
-  return "Salario";
-}
-
-function findIncome(
-  incomes: Income[],
-  source: IncomeSource,
-  month: number,
-  year: number,
-) {
-  return incomes.find(
-    (income) =>
-      normalizeSource(income.source) === source &&
-      income.month === month &&
-      income.year === year,
-  );
-}
-
-function formatAmountInput(value: number | undefined) {
-  if (!value) {
-    return "";
-  }
-
-  return String(value).replace(".", ",");
-}
-
-function parseAmountInput(value: string) {
-  const trimmed = value.trim();
-
-  if (!trimmed) {
-    return Number.NaN;
-  }
-
-  if (trimmed.includes(",")) {
-    return Number(trimmed.replace(/\./g, "").replace(",", "."));
-  }
-
-  return Number(trimmed);
-}
 
 type IncomeCardProps = {
   existingIncome: Income | undefined;
@@ -134,8 +81,8 @@ function IncomeCard({
           </p>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             {hasExistingIncome
-              ? `Atual: ${moneyFormatter.format(existingIncome?.amount ?? 0)}`
-              : "Nenhum valor cadastrado neste mes"}
+              ? `Atual: ${formatMoney(existingIncome?.amount)}`
+              : "Nenhum valor cadastrado neste mês."}
           </p>
         </div>
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
@@ -169,7 +116,7 @@ function IncomeCard({
               onChange={(event) => setUpdateFuture(event.target.checked)}
               type="checkbox"
             />
-            Atualizar este e os proximos meses
+            Atualizar este e os próximos meses
           </label>
         ) : null}
 
@@ -181,7 +128,7 @@ function IncomeCard({
               onChange={(event) => setRepeatFuture(event.target.checked)}
               type="checkbox"
             />
-            Repetir nos proximos meses
+            Repetir nos próximos meses
           </label>
         ) : null}
       </div>
@@ -241,9 +188,9 @@ export function IncomeSettingsView() {
 
   const currentIncomes = useMemo(
     () => ({
-      adiantamento: findIncome(incomes, "Adiantamento", month, year),
-      rendaExtra: findIncome(incomes, "Renda Extra", month, year),
-      salario: findIncome(incomes, "Salario", month, year),
+      adiantamento: findIncomeByReference(incomes, "Adiantamento", month, year),
+      rendaExtra: findIncomeByReference(incomes, "Renda Extra", month, year),
+      salario: findIncomeByReference(incomes, "Salario", month, year),
     }),
     [incomes, month, year],
   );
@@ -274,9 +221,7 @@ export function IncomeSettingsView() {
         type: "Fixa",
         year,
       });
-    } catch {
-      // Feedback is handled by the income store.
-    }
+    } catch {}
   }
 
   async function handleDelete() {
@@ -290,42 +235,26 @@ export function IncomeSettingsView() {
       await deleteIncome(deleteTarget.income.id, deleteFuture);
       setDeleteTarget(null);
       setDeleteFuture(false);
-    } catch {
-      // Feedback is handled by the income store.
-    }
+    } catch {}
   }
 
   return (
     <>
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-              Configuracoes de Renda
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-slate-50">
-              Salario, Adiantamento e Renda Extra
-            </h2>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              Referencia selecionada: {String(month).padStart(2, "0")}/{year}
-            </p>
-          </div>
-          <div className="flex flex-col gap-3 sm:items-end">
-            <Link
-              className={buttonClassName({ className: "self-start sm:self-end", variant: "secondary" })}
-              href="/perfil"
-            >
-              <ArrowLeft aria-hidden="true" size={16} strokeWidth={2.25} />
-              Voltar
-            </Link>
+        <PageHeader
+          actions={
             <MonthSwitcher
               className="sm:max-w-xs"
               month={month}
               onChange={setSelectedDate}
               year={year}
             />
-          </div>
-        </div>
+          }
+          backHref="/perfil"
+          description={`Referência selecionada: ${String(month).padStart(2, "0")}/${year}.`}
+          eyebrow="Configurações de Renda"
+          title="Salário, Adiantamento e Renda Extra"
+        />
 
         {error ? <Alert variant="error">{error}</Alert> : null}
         {message ? <Alert variant="success">{message}</Alert> : null}
@@ -341,7 +270,7 @@ export function IncomeSettingsView() {
               currentIncomes.salario
                 ? setDeleteTarget({
                     income: currentIncomes.salario,
-                    title: "salario",
+                    title: "salário",
                   })
                 : undefined
             }
@@ -354,7 +283,7 @@ export function IncomeSettingsView() {
                 repeatFuture,
               )
             }
-            title="Salario"
+            title="Salário"
           />
 
           <IncomeCard
@@ -434,7 +363,7 @@ export function IncomeSettingsView() {
               onChange={(event) => setDeleteFuture(event.target.checked)}
               type="checkbox"
             />
-            Excluir esta e as proximas
+            Excluir esta e as próximas
           </label>
         ) : null}
       </ConfirmationDialog>

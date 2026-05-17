@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { useLockBodyScroll } from "@/components/ui/use-lock-body-scroll";
 import { useIncomeStore } from "@/features/incomes/store/useIncomeStore";
 import type { Income, IncomeSource } from "@/features/incomes/types/income";
+import { findIncomeByReference } from "@/features/incomes/utils/incomeUtils";
+import { formatAmountInput, parseAmountInput } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 
 export type IncomeShortcutAction = "create" | "delete" | "edit";
@@ -29,43 +31,8 @@ type IncomeShortcutDialogProps = {
 const sourceLabels: Record<IncomeSource, string> = {
   Adiantamento: "adiantamento",
   "Renda Extra": "renda extra",
-  Salario: "salario",
+  Salario: "salário",
 };
-
-function formatAmountInput(value: number) {
-  return String(value).replace(".", ",");
-}
-
-function parseAmountInput(value: string) {
-  const trimmed = value.trim();
-
-  if (!trimmed) {
-    return Number.NaN;
-  }
-
-  if (trimmed.includes(",")) {
-    return Number(trimmed.replace(/\./g, "").replace(",", "."));
-  }
-
-  return Number(trimmed);
-}
-
-function normalizeSource(source: string): IncomeSource {
-  const normalized = source
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-
-  if (normalized.includes("adiantamento")) {
-    return "Adiantamento";
-  }
-
-  if (normalized.includes("renda extra")) {
-    return "Renda Extra";
-  }
-
-  return "Salario";
-}
 
 function findIncome(
   incomes: Income[],
@@ -73,12 +40,7 @@ function findIncome(
   month: number,
   year: number,
 ) {
-  return incomes.find(
-    (income) =>
-      normalizeSource(income.source) === source &&
-      income.month === month &&
-      income.year === year,
-  );
+  return findIncomeByReference(incomes, source, month, year);
 }
 
 function getTitle({ action, source }: IncomeShortcut) {
@@ -172,7 +134,7 @@ function IncomeShortcutDialogContent({
     clearFeedback();
 
     if (missingIncome) {
-      setLocalError("Nao encontrei essa renda para aplicar o atalho.");
+      setLocalError("Não encontrei essa renda para aplicar o atalho.");
       return;
     }
 
@@ -219,9 +181,7 @@ function IncomeShortcutDialogContent({
       }
 
       onSuccess();
-    } catch {
-      // A store ja mostra a mensagem de erro no modal.
-    }
+    } catch {}
   }
 
   return (
@@ -245,7 +205,7 @@ function IncomeShortcutDialogContent({
 
           {missingIncome ? (
             <Alert variant="info">
-              Ainda nao existe registro para este mes. Use o atalho de criar.
+              Ainda não existe registro para este mês. Use o atalho de criar.
             </Alert>
           ) : null}
 
@@ -288,10 +248,10 @@ function IncomeShortcutDialogContent({
               type="checkbox"
             />
             {shortcut.action === "create"
-              ? "Repetir nos proximos meses"
+              ? "Repetir nos próximos meses"
               : shortcut.action === "edit"
-                ? "Atualizar este e os proximos meses"
-                : "Excluir esta e as proximas"}
+                ? "Atualizar este e os próximos meses"
+                : "Excluir esta e as próximas"}
           </label>
         </div>
 
