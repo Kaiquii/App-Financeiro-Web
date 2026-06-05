@@ -98,10 +98,10 @@ function SummaryCard({
   return (
     <article
       className={cn(
-        "relative min-h-28 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700/45 dark:bg-slate-800/75",
+        "relative min-h-24 overflow-hidden rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm dark:border-slate-700/45 dark:bg-slate-800/75",
         "after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/40 after:content-[''] dark:after:bg-white/5",
         isFeatured &&
-          "min-h-32 bg-blue-100 p-5 dark:border-blue-900/45 dark:bg-blue-950",
+          "min-h-28 bg-blue-100 p-4 dark:border-blue-900/45 dark:bg-blue-950",
         isRemaining &&
           "border-violet-200 bg-violet-100/85 dark:border-violet-900/35 dark:bg-violet-950/70",
         isExtra &&
@@ -113,7 +113,7 @@ function SummaryCard({
         className,
       )}
     >
-      <div className="flex h-full flex-col justify-between gap-4">
+      <div className="flex h-full flex-col justify-between gap-3">
         <div className="flex items-start justify-between gap-3">
           <p
             className={cn(
@@ -135,7 +135,7 @@ function SummaryCard({
           <div className="min-w-0">
             <strong
               className={cn(
-                "block wrap-break-word text-2xl font-semibold leading-none tracking-normal text-slate-950 dark:text-white sm:text-[2rem]",
+                "block wrap-break-word text-2xl font-semibold leading-none tracking-normal text-slate-950 dark:text-white sm:text-[1.875rem]",
                 isFeatured &&
                   "text-[2rem] text-blue-700 dark:text-blue-400 sm:text-4xl",
                 isExtra && "text-emerald-600 dark:text-emerald-400",
@@ -258,12 +258,14 @@ function IncomeActions({
 function SummarySkeleton() {
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-      {Array.from({ length: 9 }).map((_, index) => (
+      {Array.from({ length: 12 }).map((_, index) => (
         <div
           className={cn(
-            "h-28 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900",
+            "h-24 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900",
             index === 0 && "md:col-span-2 lg:col-span-4",
-            index === 4 && "md:col-span-2 lg:col-span-4",
+            (index === 1 || index === 2) && "lg:col-span-2",
+            (index === 5 || index === 8 || index === 11) &&
+              "md:col-span-2 lg:col-span-2",
           )}
           key={index}
         />
@@ -321,12 +323,18 @@ export function MonthlySummaryView() {
     return monthFormatter.format(date);
   }, [month, year]);
 
-  const gastoSalario = summary
-    ? Math.max(summary.salario - summary.restante_salario, 0)
-    : 0;
-  const gastoAdiantamento = summary
-    ? Math.max(summary.adiantamento - summary.restante_adiantamento, 0)
-    : 0;
+  const salario = summary?.salario ?? 0;
+  const adiantamento = summary?.adiantamento ?? 0;
+  const rendaExtra = summary?.renda_extra_amt ?? 0;
+  const restanteSalario = summary?.restante_salario ?? 0;
+  const restanteAdiantamento = summary?.restante_adiantamento ?? 0;
+  const restanteRendaExtra = summary?.restante_renda_extra ?? 0;
+  const gastoSalario =
+    summary?.total_gasto_salario ?? Math.max(salario - restanteSalario, 0);
+  const gastoAdiantamento =
+    summary?.total_gasto_adiantamento ??
+    Math.max(adiantamento - restanteAdiantamento, 0);
+  const gastoRendaExtra = summary?.total_gasto_renda_extra ?? 0;
   const spentPercentage = summary
     ? getSpentPercentage(summary.total_expense, summary.total_income)
     : null;
@@ -446,7 +454,7 @@ export function MonthlySummaryView() {
             <SummaryCard
               action={
                 <IncomeActions
-                  amount={summary.salario}
+                  amount={salario}
                   month={month}
                   onOpen={setIncomeShortcut}
                   source="Salario"
@@ -455,12 +463,12 @@ export function MonthlySummaryView() {
               }
               label="Salário"
               tone="source"
-              value={summary.salario}
+              value={salario}
             />
             <SummaryCard
               action={
                 <IncomeActions
-                  amount={summary.adiantamento}
+                  amount={adiantamento}
                   month={month}
                   onOpen={setIncomeShortcut}
                   source="Adiantamento"
@@ -469,35 +477,41 @@ export function MonthlySummaryView() {
               }
               label="Adiantamento"
               tone="source"
-              value={summary.adiantamento}
+              value={adiantamento}
             />
 
             <SummaryCard
               action={
                 <IncomeActions
-                  amount={summary.renda_extra_amt}
+                  amount={rendaExtra}
                   month={month}
                   onOpen={setIncomeShortcut}
                   source="Renda Extra"
                   year={year}
                 />
               }
-              className="md:col-span-2"
+              className="md:col-span-2 lg:col-span-2"
               icon={<BarChart3 aria-hidden="true" size={34} />}
-              label="Renda Extra (Disponível)"
+              label="Renda Extra"
               tone="extra"
-              value={summary.restante_renda_extra}
+              value={rendaExtra}
             />
 
             <SummaryCard
               label="Restante Salário"
               tone="remaining"
-              value={summary.restante_salario}
+              value={restanteSalario}
             />
             <SummaryCard
               label="Restante Adiant."
               tone="remaining"
-              value={summary.restante_adiantamento}
+              value={restanteAdiantamento}
+            />
+            <SummaryCard
+              className="md:col-span-2 lg:col-span-2"
+              label="Restante Renda Extra"
+              tone="remaining"
+              value={restanteRendaExtra}
             />
 
             <SummaryCard
@@ -511,6 +525,13 @@ export function MonthlySummaryView() {
               label="Gasto Adiant."
               tone="spent"
               value={gastoAdiantamento}
+            />
+            <SummaryCard
+              className="md:col-span-2 lg:col-span-2"
+              icon={<ReceiptText aria-hidden="true" size={28} />}
+              label="Gasto Renda Extra"
+              tone="spent"
+              value={gastoRendaExtra}
             />
           </div>
         ) : null}
