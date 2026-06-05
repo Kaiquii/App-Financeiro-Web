@@ -377,7 +377,7 @@ export function MonthlySummaryView() {
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:justify-end">
             <MonthSwitcher
-              className="!w-72 !max-w-none sm:!w-80"
+              className="w-72! max-w-none! sm:w-80!"
               month={month}
               onChange={setSelectedDate}
               year={year}
