@@ -4,8 +4,10 @@ import {
   ChevronDown,
   Home,
   LogOut,
+  Mail,
   Menu,
   MessageCircle,
+  Star,
   UserRound,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -51,6 +53,13 @@ export function Header({ onOpenSidebar }: HeaderProps) {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const currentPageTitle = getCurrentPageTitle(pathname);
   const userName = user?.name ?? "Usuário";
+  const userEmail = user?.email ?? "E-mail não informado.";
+  const isAdmin = user?.role === "admin";
+  const userRoleLabel = isAdmin
+    ? "Administrador"
+    : user?.role === "user"
+      ? "Usuário"
+      : user?.role || "Perfil não informado";
 
   useEffect(() => {
     if (!isUserMenuOpen) {
@@ -144,7 +153,7 @@ export function Header({ onOpenSidebar }: HeaderProps) {
             <div className="relative" ref={userMenuRef}>
               <button
                 aria-expanded={isUserMenuOpen}
-                aria-haspopup="menu"
+                aria-haspopup="dialog"
                 className="inline-flex h-8 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-900 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 sm:px-3"
                 onClick={() => setIsUserMenuOpen((isOpen) => !isOpen)}
                 type="button"
@@ -163,21 +172,90 @@ export function Header({ onOpenSidebar }: HeaderProps) {
 
               {isUserMenuOpen ? (
                 <div
-                  className="absolute right-0 top-10 z-50 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-950/10 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/30"
-                  role="menu"
+                  aria-label="Informações do usuário"
+                  className="absolute right-0 top-10 z-50 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-950/10 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/30"
+                  role="dialog"
                 >
-                  <button
-                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-950/40"
-                    onClick={() => {
-                      setIsUserMenuOpen(false);
-                      setIsLogoutDialogOpen(true);
-                    }}
-                    role="menuitem"
-                    type="button"
-                  >
-                    <LogOut aria-hidden="true" size={15} strokeWidth={2.25} />
-                    Sair
-                  </button>
+                  <div className="grid gap-3 border-b border-slate-200 p-3.5 dark:border-slate-800">
+                    <div className="flex min-w-0 items-start gap-2.5">
+                      <UserRound
+                        aria-hidden="true"
+                        className="mt-0.5 shrink-0 text-slate-400 dark:text-slate-500"
+                        size={15}
+                        strokeWidth={2.25}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500">
+                          Nome
+                        </p>
+                        <p className="mt-0.5 truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
+                          {userName}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex min-w-0 items-start gap-2.5">
+                      <Mail
+                        aria-hidden="true"
+                        className="mt-0.5 shrink-0 text-slate-400 dark:text-slate-500"
+                        size={15}
+                        strokeWidth={2.25}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500">
+                          E-mail
+                        </p>
+                        <p className="mt-0.5 truncate text-sm font-semibold text-slate-700 dark:text-slate-200">
+                          {userEmail}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex min-w-0 items-start gap-2.5">
+                      <UserRound
+                        aria-hidden="true"
+                        className="mt-0.5 shrink-0 text-slate-400 dark:text-slate-500"
+                        size={15}
+                        strokeWidth={2.25}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500">
+                          Perfil
+                        </p>
+                        <span
+                          className={
+                            isAdmin
+                              ? "mt-0.5 inline-flex max-w-full items-center gap-1 truncate text-sm font-semibold text-amber-600 dark:text-amber-300"
+                              : "mt-0.5 block truncate text-sm font-semibold text-slate-700 dark:text-slate-200"
+                          }
+                        >
+                          {isAdmin ? (
+                            <Star
+                              aria-hidden="true"
+                              className="shrink-0"
+                              size={14}
+                              strokeWidth={2.4}
+                            />
+                          ) : null}
+                          {userRoleLabel}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-200 p-1.5 dark:border-slate-800">
+                    <button
+                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-950/40"
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        setIsLogoutDialogOpen(true);
+                      }}
+                      type="button"
+                    >
+                      <LogOut aria-hidden="true" size={15} strokeWidth={2.25} />
+                      Sair
+                    </button>
+                  </div>
                 </div>
               ) : null}
             </div>
