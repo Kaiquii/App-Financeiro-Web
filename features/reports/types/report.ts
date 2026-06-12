@@ -35,3 +35,76 @@ export type YearlySummary = {
   media_mensal: number;
   year: number;
 };
+
+export type InstallmentCommitmentsParams = {
+  includeCurrentMonthAsPaid?: boolean;
+  month: number;
+  months: number;
+  year: number;
+};
+
+export type InstallmentHeavyMonth = {
+  ano: number;
+  mes: number;
+  total: number;
+};
+
+export type InstallmentParcel = {
+  ano: number;
+  categoria_id: number;
+  categoria_nome: string;
+  descricao: string;
+  fonte_pagamento: string;
+  id: number;
+  mes: number;
+  parcela_atual: number;
+  serie_id: string;
+  total_parcelas: number;
+  valor: number;
+};
+
+export type InstallmentPurchase = {
+  categoria_id: number;
+  categoria_nome: string;
+  descricao: string;
+  fonte_pagamento: string;
+  primeiro_ano: number;
+  primeiro_mes: number;
+  proxima_parcela?: InstallmentParcel | null;
+  parcelas_pagas: number;
+  parcelas_restantes: number;
+  serie_id: string;
+  total_original: number;
+  total_pago: number;
+  total_parcelas: number;
+  total_restante: number;
+  ultimo_ano: number;
+  ultimo_mes: number;
+  valor_parcela: number;
+};
+
+export type InstallmentTimelineMonth = {
+  ano: number;
+  mes: number;
+  parcelas: InstallmentParcel[];
+  total: number;
+};
+
+export type InstallmentCommitmentsSummary = {
+  mes_mais_pesado?: InstallmentHeavyMonth | null;
+  parcelas_pagas: number;
+  parcelas_restantes: number;
+  total_compras: number;
+  total_original: number;
+  total_pago: number;
+  total_restante: number;
+};
+
+export type InstallmentCommitmentsResponse = {
+  ano_base: number;
+  compras: InstallmentPurchase[];
+  linha_do_tempo: InstallmentTimelineMonth[];
+  mes_base: number;
+  meses: number;
+  resumo: InstallmentCommitmentsSummary;
+};

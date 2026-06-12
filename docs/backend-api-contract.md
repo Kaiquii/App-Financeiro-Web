@@ -724,6 +724,33 @@ Resposta esperada:
 }
 ```
 
+### Compromissos parcelados
+
+```http
+GET /api/reports/installment-commitments?month=6&year=2026&months=12&include_current_month_as_paid=false
+```
+
+Esse relatório monta a visão futura de despesas com `type = "Parcelada"`. Despesas únicas e fixas não entram.
+
+Query params:
+
+- `month`: mês base. Opcional; se não enviar, o back-end usa o mês atual.
+- `year`: ano base. Opcional; se não enviar, o back-end usa o ano atual.
+- `months`: quantidade de meses na linha do tempo. Opcional, padrão `12`, máximo `60`.
+- `include_current_month_as_paid`: quando `true`, o mês base é tratado como já pago e a visão começa no mês seguinte. Quando `false` ou omitido, o mês base ainda conta como aberto/restante.
+
+Campos principais:
+
+- `resumo.total_original`: valor total original das compras parceladas.
+- `resumo.total_pago`: valor considerado pago antes do mês aberto.
+- `resumo.total_restante`: valor que ainda falta pagar.
+- `resumo.parcelas_pagas`: quantidade de parcelas consideradas pagas.
+- `resumo.parcelas_restantes`: quantidade de parcelas futuras/em aberto.
+- `resumo.total_compras`: quantidade de compras parceladas agrupadas.
+- `resumo.mes_mais_pesado`: mês da linha do tempo com maior total de parcelas.
+- `compras`: lista de compras parceladas agrupadas.
+- `linha_do_tempo`: calendário mensal com total e parcelas de cada mês.
+
 ## Assistente com IA
 
 Todas as rotas do assistente são protegidas e usam:

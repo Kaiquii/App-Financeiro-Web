@@ -30,6 +30,7 @@ type HeaderProps = {
 const extraRouteTitles = [
   { href: "/home", label: "Home" },
   { href: "/salario", label: "Salário" },
+  { href: "/relatorios/compromissos-parcelados", label: "Compromissos Parcelados" },
   { href: "/perfil/ajuda", label: "Central de Ajuda" },
   { href: "/perfil/categorias", label: "Categorias" },
   { href: "/perfil/editar", label: "Editar Perfil" },
@@ -207,7 +208,7 @@ export function Header({ onOpenSidebar }: HeaderProps) {
                       {avatarUrl ? (
                         <button
                           aria-label="Visualizar foto de perfil"
-                          className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-emerald-100 text-emerald-700 transition hover:border-emerald-300 hover:ring-2 hover:ring-emerald-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 dark:border-slate-800 dark:bg-emerald-950/50 dark:text-emerald-300"
+                          className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-emerald-100 text-emerald-700 hover:border-emerald-300 hover:ring-2 hover:ring-emerald-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 dark:border-slate-800 dark:bg-emerald-950/50 dark:text-emerald-300"
                           onClick={() => {
                             setIsUserMenuOpen(false);
                             setIsPhotoPreviewOpen(true);

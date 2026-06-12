@@ -1,4 +1,6 @@
 import type {
+  InstallmentCommitmentsParams,
+  InstallmentCommitmentsResponse,
   ReportCategory,
   ReportChartItem,
   ReportSummary,
@@ -11,6 +13,33 @@ function normalizeArrayResponse<T>(data: T[] | null) {
 }
 
 export const reportsApi = {
+  async getInstallmentCommitments({
+    includeCurrentMonthAsPaid = false,
+    month,
+    months,
+    year,
+  }: InstallmentCommitmentsParams) {
+    const response = await apiClient.get<InstallmentCommitmentsResponse>(
+      "/api/reports/installment-commitments",
+      {
+        params: {
+          include_current_month_as_paid: includeCurrentMonthAsPaid,
+          month,
+          months,
+          year,
+        },
+      },
+    );
+
+    return {
+      ...response.data,
+      compras: Array.isArray(response.data.compras) ? response.data.compras : [],
+      linha_do_tempo: Array.isArray(response.data.linha_do_tempo)
+        ? response.data.linha_do_tempo
+        : [],
+    };
+  },
+
   async getCategories(month: number, year: number) {
     const response = await apiClient.get<ReportCategory[] | null>(
       "/api/reports/categories",

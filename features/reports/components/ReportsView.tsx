@@ -5,16 +5,18 @@ import {
   BarChart3,
   CalendarDays,
   CircleDollarSign,
+  CreditCard,
   PieChart,
   RefreshCcw,
   TrendingDown,
   TrendingUp,
   Wallet,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClassName } from "@/components/ui/button";
 import { DropdownSelect } from "@/components/ui/dropdown-select";
 import {
   formatShortMonth,
@@ -436,13 +438,23 @@ export function ReportsView() {
 
   return (
     <section className="mx-auto flex w-full max-w-6xl flex-col gap-5">
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-3">
         <MonthSwitcher
           className="border-transparent bg-transparent shadow-none dark:border-transparent dark:bg-transparent"
           month={month}
           onChange={setSelectedDate}
           year={year}
         />
+        <Link
+          className={buttonClassName({
+            className: "h-9 px-3 text-xs sm:text-sm",
+            variant: "secondary",
+          })}
+          href={`/relatorios/compromissos-parcelados?month=${month}&year=${year}`}
+        >
+          <CreditCard aria-hidden="true" size={16} />
+          Compromissos Parcelados
+        </Link>
       </div>
 
       {isLoading ? <ReportsSkeleton /> : null}
